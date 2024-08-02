@@ -1,0 +1,10 @@
+# Ignore the Dockerfile itself
+Dockerfile
+# Ignore the Docker image files
+*.tar
+# Ignore the git repository
+.git
+# Ignore the vendor directory (if using Go modules)
+vendor
+# Ignore the bin directory
+bin
