@@ -8,3 +8,4 @@ Dockerfile
 vendor
 # Ignore the bin directory
 bin
+#Ignore license

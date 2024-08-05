@@ -1,29 +1,29 @@
-# Use a lightweight base image for Go applications
+# Stage 1: Build
 FROM golang:alpine AS builder
 
-# Set the working directory for the build stage
+# Set the working directory in the build stage
 WORKDIR /app
 
-# Copy the project code to the build stage
+# Copy the project code to the /app directory in the container
 COPY . .
 
-# Install dependencies during build
+# Download Go module dependencies
 RUN go mod download
 
 # Build the Go binary
-RUN go build -o asciiartserver main.go
+RUN go build -o mybinary main.go
 
-# Use a slimmer image for the final container
+# Stage 2: Final Image
 FROM alpine:latest
 
-# Copy the binary from the build stage
-COPY --from=builder /app/asciiartserver /app/asciiartserver
+# Copy the binary from the build stage to the final image
+COPY --from=builder /app /app
 
-# Set the working directory for the final container
+# Set the working directory in the final image
 WORKDIR /app
 
-# Expose the port where the server will listen
+# Expose the port the application will run on
 EXPOSE 8080
 
-# Command to run the server
-CMD ["asciiartserver"]
+# Command to run the binary
+CMD ["./mybinary"]
