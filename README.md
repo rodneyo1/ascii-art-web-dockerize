@@ -7,13 +7,18 @@ Ascii-art-web entails containerizing of the ascii-art-web project using Docker. 
 - Utilizes specific graphical templates for ASCII representation
 - Containerization of the application using Docker.
 
+## Prerequisites
+
+- Docker: Ensure Docker is installed on your system. You can download it from [Docker's official website](https://www.docker.com/get-started).
+- Go: Make sure you have Go installed. Instructions can be found at [Go's official website](https://golang.org/doc/install).
+
+
 ## Installation
 
 1. Clone the repository:
 
-    ```bash
-    git clone https://learn.zone01kisumu.ke/git/rodnochieng/ascii-art-web-dockerize
-    ```
+    git clone <a>https://learn.zone01kisumu.ke/git/rodnochieng/ascii-art-web-dockerize</a>
+
 
 2. Navigate to the project directory:
 
