@@ -1,5 +1,10 @@
 # Stage 1: Build
-FROM golang:alpine AS builder
+FROM ubuntu AS builder
+
+# Install required packages
+RUN apt-get update && apt-get install -y \
+    git \
+    golang
 
 # Set the working directory in the build stage
 WORKDIR /app
@@ -14,7 +19,7 @@ RUN go mod download
 RUN go build -o mybinary main.go
 
 # Stage 2: Final Image
-FROM alpine:latest
+FROM ubuntu:latest
 
 # Copy the binary from the build stage to the final image
 COPY --from=builder /app /app
