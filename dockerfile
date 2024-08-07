@@ -1,6 +1,11 @@
 # Stage 1: Build
 FROM ubuntu AS builder
 
+# Labels for the build stage
+LABEL maintainer="rodneyotieno27@gmail.com" \
+      version="1.0" \
+      description="Build stage for Go application"
+
 # Install required packages
 RUN apt-get update && apt-get install -y \
     git \
@@ -20,6 +25,11 @@ RUN go build -o mybinary main.go
 
 # Stage 2: Final Image
 FROM ubuntu:latest
+
+# Labels for the final image
+LABEL maintainer="rodneyotieno27@gmail.com" \
+      version="1.0" \
+      description="Final image with Go application"
 
 # Copy the binary from the build stage to the final image
 COPY --from=builder /app /app
