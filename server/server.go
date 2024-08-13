@@ -6,6 +6,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 var Tmpl *template.Template
@@ -86,9 +87,15 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Convert the ASCII art to bytes
+	artBytes := []byte(art)
+	contentLength := len(artBytes)
+
+
 	// Set the headers to trigger a file download
 	w.Header().Set("Content-Disposition", "attachment; filename=ascii_art.txt")
 	w.Header().Set("Content-Type", "text/plain")
+	w.Header().Set("Content-Length", strconv.Itoa(contentLength))
 
 	// Write the ASCII art to the response
 	if _, err := w.Write([]byte(art)); err != nil {
