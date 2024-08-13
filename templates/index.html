@@ -30,7 +30,10 @@
         <div>
             {{if .Art}}
             <pre>{{.Art}}</pre>
-            <a href="/download?art={{.Art | urlquery}}" class="download-button" download="ascii_art.txt">Download ASCII Art</a>
+            <form class="download" action="/download" method="post">
+                <input type="hidden" name="art" value="{{.Art | html}}">
+                <input type="submit" value="Download ASCII Art">
+            </form>
             {{end}}
         </div>
 

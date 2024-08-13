@@ -84,13 +84,13 @@ func handleError(w http.ResponseWriter, data *PageData, statusCode int, errMsg s
 
 // DownloadHandler downloads the generated ascii art into a .txt file
 func DownloadHandler(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodGet {
-		handleError(w, &PageData{}, http.StatusMethodNotAllowed, "Invalid request method", "Invalid request method")
+	if r.Method != http.MethodPost {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
 		return
 	}
 
-	// Extract the ASCII art from the query parameters (if available)
-	art := r.URL.Query().Get("art")
+	// Extract the ASCII art from the form
+	art := r.FormValue("art")
 	if art == "" {
 		handleError(w, &PageData{}, http.StatusBadRequest, "No ASCII art provided", "No ASCII art provided")
 		return

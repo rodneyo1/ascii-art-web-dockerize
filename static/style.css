@@ -56,7 +56,7 @@ input[type="submit"] {
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
-input[type="submit"]:hover, .download-button:hover {
+input[type="submit"]:hover, button:hover {
     background-color: #0056b3;
 }
 .error {
@@ -74,11 +74,28 @@ pre {
     Overflow: scroll;
     border-radius: 5px;
 }
+ .download{
+    width: 10rem;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 0px;
+}
+.download input {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
 @media (max-width: 600px) {
     textarea {
         width: 100%;
     }
-    select, input[type="submit"], .download-button {
+    select, input[type="submit"], button {
         width: 100%;
     }
 }
