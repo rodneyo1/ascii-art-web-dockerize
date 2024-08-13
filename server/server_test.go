@@ -22,14 +22,14 @@ func TestRenderTemplate(t *testing.T) {
 
 	for _, tt := range tests {
 		rr := httptest.NewRecorder()
-		renderTemplate(rr, tt.data)
+		RenderTemplate(rr, "test",tt.data)
 
 		if status := rr.Code; status != tt.statusCode {
-			t.Errorf("renderTemplate returned wrong status code: got %v want %v", status, tt.statusCode)
+			t.Errorf("RenderTemplate returned wrong status code: got %v want %v", status, tt.statusCode)
 		}
 
 		if !strings.Contains(rr.Body.String(), tt.expected) {
-			t.Errorf("renderTemplate returned unexpected body: got %v want %v", rr.Body.String(), tt.expected)
+			t.Errorf("RenderTemplate returned unexpected body: got %v want %v", rr.Body.String(), tt.expected)
 		}
 	}
 }
