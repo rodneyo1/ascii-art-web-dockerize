@@ -33,7 +33,10 @@ func main() {
 		case "/about":
 			// Handle the /about path
 			data := &server.PageData{}
-			server.RenderAboutTemplate(w, data)
+			if err := server.Tmpl.ExecuteTemplate(w, "about.html", data); err != nil {
+				log.Printf("Error executing template: %v", err)
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			}
 		default:
 			// Handle 404 for unregistered paths
 			if !strings.HasPrefix(r.URL.Path, "/static/") {
@@ -41,7 +44,10 @@ func main() {
 					Error: "Page Not Found",
 				}
 				w.WriteHeader(http.StatusNotFound)
-				server.RenderErrorTemplate(w, data)
+				if err := server.Tmpl.ExecuteTemplate(w, "error.html", data); err != nil {
+					log.Printf("Error executing template: %v", err)
+					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+				}
 				return
 			}
 		}
