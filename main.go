@@ -16,17 +16,15 @@ func main() {
 		return
 	}
 
-	// Define the handler function for the root path
+	// Define the handler functions
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/":
 			server.AsciiArtHandler(w, r)
 		case "/about":
-			// Handle the /about path
 			data := &server.PageData{}
 			server.RenderTemplate(w,"templates/about.html",data)
 		case "/download":
-			// Handle file download
 			server.DownloadHandler(w, r)
 		default:
 			// Handle 404 for unregistered paths
@@ -41,7 +39,7 @@ func main() {
 		}
 	})
 
-	// Serve other static files (e.g., CSS, JS) using FileServer
+	// Serve static files using FileServer
 	staticDir := http.Dir("static")
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(staticDir)))
 

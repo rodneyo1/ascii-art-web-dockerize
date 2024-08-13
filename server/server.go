@@ -15,7 +15,7 @@ type PageData struct {
 	Error string
 }
 
-
+// AsciiArtHandler generates ascii art as data and calls the rendeer function with "index.html"
 func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		// If not a POST request, just render the form
@@ -50,6 +50,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	RenderTemplate(w,"templates/index.html", data)
 }
 
+// RenderTemplate renders and executes templates
 func RenderTemplate(w http.ResponseWriter, templateFile string, data *PageData) {
 	var err error
 	// Parse the template file
@@ -70,6 +71,7 @@ func RenderTemplate(w http.ResponseWriter, templateFile string, data *PageData) 
 	}
 }
 
+// handleError logs errors and sends appropriate status codes
 func handleError(w http.ResponseWriter, data *PageData, statusCode int, errMsg string, logMsg string) {
 	data.Error = errMsg
 	log.Println(logMsg)
