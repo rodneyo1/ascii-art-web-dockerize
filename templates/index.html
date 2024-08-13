@@ -8,34 +8,34 @@
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>ASCII Art Generator</h1>
-    <form action="/" method="post">
-        <p>Enter text below</p>
-        <textarea required name="input" id="input" placeholder="Your text.."rows="10" cols="50" maxlength="150" spellcheck="false" wrap="off"></textarea><br>
-        <br>
-        <label for="banner">Select Banner:</label>
-        <select id="banner" name="banner" required>
-            <option value="standard">Standard</option>
-            <option value="shadow">Shadow</option>
-            <option value="thinkertoy">Thinkertoy</option>
-        </select>
-        <br>
-        <br>
-        <input type="submit" value="Generate ASCII Art">
-    </form>
-    {{if .Error}}
-    <p class=error style="color:red">{{.Error}}</p>
-    {{end}}
-    <div>
-        {{if .Art}}
-        <pre>{{.Art}}</pre>
-        <a href="/download?art={{.Art | urlquery}}" download="ascii_art.txt">
-            <button>Download ASCII Art</button>
-        </a>
+    <main>
+        <h1>ASCII Art Generator</h1>
+        <form action="/" method="post">
+            <p>Enter text below</p>
+            <textarea required name="input" id="input" placeholder="Your text.."rows="10" cols="50" maxlength="150" spellcheck="false" wrap="off"></textarea><br>
+            <br>
+            <label for="banner">Select Banner:</label>
+            <select id="banner" name="banner" required>
+                <option value="standard">Standard</option>
+                <option value="shadow">Shadow</option>
+                <option value="thinkertoy">Thinkertoy</option>
+            </select>
+            <br>
+            <br>
+            <input type="submit" value="Generate ASCII Art">
+        </form>
+        {{if .Error}}
+        <p class=error style="color:red">{{.Error}}</p>
         {{end}}
-    </div> 
-    
-    <footer>
+        <div>
+            {{if .Art}}
+            <pre>{{.Art}}</pre>
+            <a href="/download?art={{.Art | urlquery}}" class="download-button" download="ascii_art.txt">Download ASCII Art</a>
+            {{end}}
+        </div>
+
+    </main>
+     <footer>
         <p>&copy; 2024. All rights reserved.</p>
         <p>
             <a href="/about">About Us</a>

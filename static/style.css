@@ -1,9 +1,18 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
     margin: 0;
     padding: 20px;
     color: #333;
+    display: flex;
+    flex-direction: column
+}
+main {
+    flex: 1;
 }
 h1 {
     text-align: center;
@@ -47,7 +56,7 @@ input[type="submit"] {
     font-size: 16px;
     transition: background-color 0.3s ease;
 }
-input[type="submit"]:hover {
+input[type="submit"]:hover, .download-button:hover {
     background-color: #0056b3;
 }
 .error {
@@ -69,7 +78,7 @@ pre {
     textarea {
         width: 100%;
     }
-    select, input[type="submit"] {
+    select, input[type="submit"], .download-button {
         width: 100%;
     }
 }
