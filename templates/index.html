@@ -29,6 +29,9 @@
     <div>
         {{if .Art}}
         <pre>{{.Art}}</pre>
+        <a href="/download?art={{.Art | urlquery}}" download="ascii_art.txt">
+            <button>Download ASCII Art</button>
+        </a>
         {{end}}
     </div> 
     

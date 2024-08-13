@@ -72,3 +72,27 @@ func handleError(w http.ResponseWriter, data *PageData, statusCode int, errMsg s
 	// Render the template after setting the status code
 	renderTemplate(w, data)
 }
+
+func DownloadHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		return
+	}
+
+	// Extract the ASCII art from the query parameters (if available)
+	art := r.URL.Query().Get("art")
+	if art == "" {
+		http.Error(w, "No ASCII art provided", http.StatusBadRequest)
+		return
+	}
+
+	// Set the headers to trigger a file download
+	w.Header().Set("Content-Disposition", "attachment; filename=ascii_art.txt")
+	w.Header().Set("Content-Type", "text/plain")
+
+	// Write the ASCII art to the response
+	if _, err := w.Write([]byte(art)); err != nil {
+		log.Printf("Error writing file: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}

@@ -37,6 +37,9 @@ func main() {
 				log.Printf("Error executing template: %v", err)
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 			}
+		case "/download":
+			// Handle file download
+			server.DownloadHandler(w, r)
 		default:
 			// Handle 404 for unregistered paths
 			if !strings.HasPrefix(r.URL.Path, "/static/") {
