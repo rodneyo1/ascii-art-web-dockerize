@@ -15,6 +15,7 @@ type PageData struct {
 	Error string
 }
 
+
 func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		// If not a POST request, just render the form
@@ -55,7 +56,7 @@ func renderTemplate(w http.ResponseWriter, data *PageData) {
 		http.Error(w, "Template file not found", http.StatusNotFound)
 		return
 	}
-	if err := Tmpl.Execute(w, data); err != nil {
+	if err := Tmpl.ExecuteTemplate(w, "index.html", data); err != nil {
 		log.Printf("Error executing template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	} else {

@@ -20,40 +20,36 @@ func main() {
 	var err error
 
 	// Parse the template file
-	server.Tmpl, err = template.ParseFiles("templates/index.html")
+	server.Tmpl, err = template.ParseFiles("templates/index.html", "templates/about.html", "templates/error.html")
 	if err != nil {
 		log.Printf("Error parsing template: %v", err)
 	}
 
 	// Define the handler function for the root path
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		// Handle valid paths
-		if r.URL.Path == "/" {
+		switch r.URL.Path {
+		case "/":
 			server.AsciiArtHandler(w, r)
-			return
-		}
-
-		// Handle 404 for unregistered paths
-		if !strings.HasPrefix(r.URL.Path, "/static/") {
-			var PageNotfound *template.Template
-
-			PageNotfound, err = template.ParseFiles("templates/error.html")
-			if err != nil {
-				log.Printf("Error parsing template: %v", err)
-			}
-
-			data := &server.PageData{
-				Error: "Page Not Found",
-			}
-			w.WriteHeader(http.StatusNotFound)
-			if err := PageNotfound.Execute(w, data); err != nil {
+		case "/about":
+			// Handle the /about path
+			data := &server.PageData{}
+			if err := server.Tmpl.ExecuteTemplate(w, "about.html", data); err != nil {
 				log.Printf("Error executing template: %v", err)
 				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			} else {
-				log.Println("Template executed successfully")
 			}
-
-			return
+		default:
+			// Handle 404 for unregistered paths
+			if !strings.HasPrefix(r.URL.Path, "/static/") {
+				data := &server.PageData{
+					Error: "Page Not Found",
+				}
+				w.WriteHeader(http.StatusNotFound)
+				if err := server.Tmpl.ExecuteTemplate(w, "error.html", data); err != nil {
+					log.Printf("Error executing template: %v", err)
+					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+				}
+				return
+			}
 		}
 	})
 
