@@ -16,12 +16,12 @@ type PageData struct {
 	Error string
 }
 
-
+// AsciiArtHandler generates ascii art as data and calls the rendeer function with "index.html"
 func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		// If not a POST request, just render the form
 		data := &PageData{}
-		renderTemplate(w, data)
+		RenderTemplate(w,"templates/index.html", data)
 		return
 	}
 
@@ -48,16 +48,23 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.Art = art
-	renderTemplate(w, data)
+	RenderTemplate(w,"templates/index.html", data)
 }
 
-func renderTemplate(w http.ResponseWriter, data *PageData) {
+// RenderTemplate renders and executes templates
+func RenderTemplate(w http.ResponseWriter, templateFile string, data *PageData) {
+	var err error
+	// Parse the template file
+	Tmpl, err = template.ParseFiles(templateFile)
+	if err != nil {
+		log.Printf("Error parsing template: %v", err)
+	}
 	if Tmpl == nil {
 		log.Println("Template file not found")
 		http.Error(w, "Template file not found", http.StatusNotFound)
 		return
 	}
-	if err := Tmpl.ExecuteTemplate(w, "index.html", data); err != nil {
+	if err := Tmpl.Execute(w, data); err != nil {
 		log.Printf("Error executing template: %v", err)
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 	} else {
@@ -65,13 +72,14 @@ func renderTemplate(w http.ResponseWriter, data *PageData) {
 	}
 }
 
+// handleError logs errors and sends appropriate status codes
 func handleError(w http.ResponseWriter, data *PageData, statusCode int, errMsg string, logMsg string) {
 	data.Error = errMsg
 	log.Println(logMsg)
 	// Set the status code here
 	w.WriteHeader(statusCode)
 	// Render the template after setting the status code
-	renderTemplate(w, data)
+	RenderTemplate(w,"templates/index.html", data)
 }
 
 func DownloadHandler(w http.ResponseWriter, r *http.Request) {

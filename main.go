@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -17,28 +16,15 @@ func main() {
 		return
 	}
 
-	var err error
-
-	// Parse the template file
-	server.Tmpl, err = template.ParseFiles("templates/index.html", "templates/about.html", "templates/error.html")
-	if err != nil {
-		log.Printf("Error parsing template: %v", err)
-	}
-
-	// Define the handler function for the root path
+	// Define the handler functions
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/":
 			server.AsciiArtHandler(w, r)
 		case "/about":
-			// Handle the /about path
 			data := &server.PageData{}
-			if err := server.Tmpl.ExecuteTemplate(w, "about.html", data); err != nil {
-				log.Printf("Error executing template: %v", err)
-				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-			}
+			server.RenderTemplate(w,"templates/about.html",data)
 		case "/download":
-			// Handle file download
 			server.DownloadHandler(w, r)
 		default:
 			// Handle 404 for unregistered paths
@@ -47,16 +33,13 @@ func main() {
 					Error: "Page Not Found",
 				}
 				w.WriteHeader(http.StatusNotFound)
-				if err := server.Tmpl.ExecuteTemplate(w, "error.html", data); err != nil {
-					log.Printf("Error executing template: %v", err)
-					http.Error(w, "Internal Server Error", http.StatusInternalServerError)
-				}
+				server.RenderTemplate(w,"templates/error.html",data)
 				return
 			}
 		}
 	})
 
-	// Serve other static files (e.g., CSS, JS) using FileServer
+	// Serve static files using FileServer
 	staticDir := http.Dir("static")
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(staticDir)))
 
