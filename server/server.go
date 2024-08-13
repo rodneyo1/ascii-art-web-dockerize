@@ -21,7 +21,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
 		// If not a POST request, just render the form
 		data := &PageData{}
-		RenderTemplate(w,"templates/index.html", data)
+		RenderTemplate(w, "templates/index.html", data)
 		return
 	}
 
@@ -48,7 +48,7 @@ func AsciiArtHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data.Art = art
-	RenderTemplate(w,"templates/index.html", data)
+	RenderTemplate(w, "templates/index.html", data)
 }
 
 // RenderTemplate renders and executes templates
@@ -79,19 +79,20 @@ func handleError(w http.ResponseWriter, data *PageData, statusCode int, errMsg s
 	// Set the status code here
 	w.WriteHeader(statusCode)
 	// Render the template after setting the status code
-	RenderTemplate(w,"templates/index.html", data)
+	RenderTemplate(w, "templates/index.html", data)
 }
 
+// DownloadHandler downloads the generated ascii art into a .txt file
 func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet {
-		http.Error(w, "Invalid request method", http.StatusMethodNotAllowed)
+		handleError(w, &PageData{}, http.StatusMethodNotAllowed, "Invalid request method", "Invalid request method")
 		return
 	}
 
 	// Extract the ASCII art from the query parameters (if available)
 	art := r.URL.Query().Get("art")
 	if art == "" {
-		http.Error(w, "No ASCII art provided", http.StatusBadRequest)
+		handleError(w, &PageData{}, http.StatusBadRequest, "No ASCII art provided", "No ASCII art provided")
 		return
 	}
 
@@ -99,15 +100,13 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	artBytes := []byte(art)
 	contentLength := len(artBytes)
 
-
 	// Set the headers to trigger a file download
 	w.Header().Set("Content-Disposition", "attachment; filename=ascii_art.txt")
 	w.Header().Set("Content-Type", "text/plain")
 	w.Header().Set("Content-Length", strconv.Itoa(contentLength))
 
 	// Write the ASCII art to the response
-	if _, err := w.Write([]byte(art)); err != nil {
-		log.Printf("Error writing file: %v", err)
-		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	if _, err := w.Write(artBytes); err != nil {
+		handleError(w, &PageData{}, http.StatusInternalServerError, "Internal Server Error", fmt.Sprintf("Error writing file: %v", err))
 	}
 }

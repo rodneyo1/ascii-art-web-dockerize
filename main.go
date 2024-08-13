@@ -23,7 +23,7 @@ func main() {
 			server.AsciiArtHandler(w, r)
 		case "/about":
 			data := &server.PageData{}
-			server.RenderTemplate(w,"templates/about.html",data)
+			server.RenderTemplate(w, "templates/about.html", data)
 		case "/download":
 			server.DownloadHandler(w, r)
 		default:
@@ -33,7 +33,7 @@ func main() {
 					Error: "Page Not Found",
 				}
 				w.WriteHeader(http.StatusNotFound)
-				server.RenderTemplate(w,"templates/error.html",data)
+				server.RenderTemplate(w, "templates/error.html", data)
 				return
 			}
 		}
